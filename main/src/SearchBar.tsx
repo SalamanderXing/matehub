@@ -1,12 +1,10 @@
 import "./SearchBar.css";
 import ModuleView from "./ModuleView";
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 export default () => {
-  const componentTypes = ["models", "trainers", "data_loaders"];
-  const [selectedProjects, setSelectedProjects] = useState(
-    {} as Record<string, Record<string, any>>
-  );
+  const componentTypes = ["models", "trainers", "data_loaders", "analyses"];
   const [components, setComponents] = useState({
     data_loaders: [],
     models: [],
@@ -20,7 +18,7 @@ export default () => {
   useEffect(() => {
     (async () => {
       const tmpComponents = Object.fromEntries(
-        Object.entries(components).map(([e, v]) => [e, {}])
+        Object.entries(components).map(([e, _]) => [e, {}])
       ) as Record<string, Record<string, any>>;
       //const proto = await fetch("./items.json");
       const proto = await fetch(
@@ -107,34 +105,51 @@ export default () => {
       handleAddTag();
     }
   };
-
+  const showHelp = () => {
+    Swal.fire({
+        title:"How do I use it?",
+        html:`
+        <div style="text-align:center">
+          <div style="width:340px; margin-left:auto; margin-right:auto;">
+            <p> To install a compoment in your mate project, execute the following steps</p>
+              <p><strong>1.Select a component type</strong></p>
+              <p><strong>2. Add dependency filters</strong>, for example <code>torch</code> if you work with pytorch. Type <code>Enter</code> to add a dependency or click on <code>Add Dependency</code></p>
+              <p><strong>3. Click</strong> on the <code>Copy Install URL</code> button next to your component. This will copy the component URL to your clipboard.</p>
+              <p><strong>4.</strong> In your mate project, <strong>execute</strong> <code>mate install [paste your component URL]</code></p>
+              <p><strong>5.</strong> <strong>Enjoy</strong> your new component!</p>
+          </div>
+          <p>Please check out the <a href="https://salamanderxing.github.io/mate/" target="_blank">Mate Docs</a></p>
+        </div>
+        `
+      })
+  }
   return (
-    <div style={{ textAlign: "center" }}>
-      {/*
-      <img
-        style={{
-          background: "url(logo.jpeg)",
-          width: "450px",
-          height: "450px",
-          objectFit: "cover",
-          backgroundPosition: "5% bottom",
-          scale: "0.5",
-          borderRadius: "50%",
-          marginTop: "-100px",
-          marginBottom: "-100px",
-        }}
-      />
-      */}
+    <div style={{ marginTop:'20px', textAlign: "center" }}>
+    <h1 style={{color:'black'}}> 🧉 MateHub</h1>
+    <svg onClick={showHelp} style={{zIndex:1, marginRight:'10px', marginLeft:"45vw", marginTop:'-40px', position:'fixed'}} fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" viewBox="0 0 416.979 416.979"
+	>
+<g>
+	<path d="M356.004,61.156c-81.37-81.47-213.377-81.551-294.848-0.182c-81.47,81.371-81.552,213.379-0.181,294.85
+		c81.369,81.47,213.378,81.551,294.849,0.181C437.293,274.636,437.375,142.626,356.004,61.156z M208.554,334.794
+		c-11.028,0-19.968-8.939-19.968-19.968s8.939-19.969,19.968-19.969c11.028,0,19.968,8.939,19.968,19.969
+		C228.521,325.854,219.582,334.794,208.554,334.794z M241.018,214.566c-11.406,6.668-12.381,14.871-12.43,38.508
+		c-0.003,1.563-0.008,3.14-0.017,4.726c-0.071,11.172-9.147,20.18-20.304,20.18c-0.044,0-0.088,0-0.131,0
+		c-11.215-0.071-20.248-9.22-20.178-20.436c0.01-1.528,0.013-3.047,0.016-4.552c0.05-24.293,0.111-54.524,32.547-73.484
+		c26.026-15.214,29.306-25.208,26.254-38.322c-3.586-15.404-17.653-19.396-28.63-18.141c-3.686,0.423-22.069,3.456-22.069,21.642
+		c0,11.213-9.092,20.306-20.307,20.306c-11.215,0-20.306-9.093-20.306-20.306c0-32.574,23.87-58.065,58.048-61.989
+		c35.2-4.038,65.125,16.226,72.816,49.282C297.824,181.361,256.555,205.485,241.018,214.566z"/>
+</g>
+</svg>
       <div
         className="input-group input-group-lg noselect"
         style={{
           borderColor: "#5f8d4e",
-          maxWidth: "700px",
+          maxWidth: "500px",
+          textAlign:'center',
           marginLeft: "auto",
           marginRight: "auto",
           marginBottom: "5px",
           marginTop: "30px",
-          //borderRadius: "50%",
           color: "#000",
         }}
       >
@@ -250,6 +265,18 @@ export default () => {
                       <div className="result-body">
                         <div className="table-responsive">
                           <table style={{ width: "100%" }}>
+                            <thead>
+                              <tr>
+                                <th></th>
+                                <th>Repo Name</th>
+                                <th>Component Name</th>
+                                <th>Time</th>
+                                <th>GitHub</th>
+                                <th>Dependencies</th>
+                                <th>Copy Install URL</th>
+                                <th>GitHub stars</th>
+                              </tr>
+                            </thead>
                             <tbody
                               className="widget-26"
                               style={{ width: "100%" }}

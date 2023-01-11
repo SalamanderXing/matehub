@@ -209,6 +209,7 @@ export default () => {
           id='dep'
           onKeyDown={handleKeyDown}
           className="form-control"
+          placeholder="....."
           style={{
             borderRadius: "0 30px 30px 0",
             maxWidth: "150px",
